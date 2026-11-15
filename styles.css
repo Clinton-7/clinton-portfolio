@@ -454,19 +454,39 @@ body.has-bar{--bar:46px}
 .industry{display:flex;flex-direction:column}
 .ind-eg{margin-top:auto}
 
-/* ===== digital marketing ===== */
-.marketing{display:grid;grid-template-columns:.85fr 1.15fr;gap:40px;margin-top:22px;padding:40px;border-radius:24px;background:linear-gradient(140deg,#0f2233,#0b141e 60%);border:1px solid rgba(95,224,196,.25);position:relative;overflow:hidden}
-.marketing::before{content:"";position:absolute;width:420px;height:420px;right:-140px;top:-160px;border-radius:50%;background:radial-gradient(circle,rgba(47,169,236,.22),transparent 65%);pointer-events:none}
-.mk-intro h3{font-size:1.7rem;margin-bottom:12px}
-.mk-intro p:not(.eyebrow){color:#b6c5d3;margin-bottom:26px}
-.mk-ico{font-size:1.4rem}
-.mk-list{list-style:none;display:grid;gap:12px;position:relative}
-.mk-list li{position:relative;padding:16px 18px 16px 52px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid var(--line);transition:border-color .3s,transform .3s var(--ease),background .3s}
-.mk-list li:hover{border-color:rgba(95,224,196,.4);background:rgba(95,224,196,.05);transform:translateX(6px)}
-.mk-list li::before{content:"✓";position:absolute;left:16px;top:17px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:800;background:rgba(95,224,196,.15);color:var(--teal)}
-.mk-list b{display:block;font-family:Sora;font-size:1rem;margin-bottom:3px}
-.mk-list span{color:var(--muted);font-size:.92rem}
-@media (max-width:1000px){.marketing{grid-template-columns:1fr;padding:30px 22px;gap:26px}}
+/* ===== digital marketing: growth journey ===== */
+.growth{margin-top:70px}
+.gj-head{max-width:920px;margin-bottom:46px}
+.gj-head h3{font-size:clamp(1.7rem,3.4vw,2.6rem);margin-bottom:14px}
+.gj-head p:not(.eyebrow){color:#b6c5d3}
+.gj-track{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.gj-line{position:absolute;left:8%;right:8%;top:24px;width:84%;height:20px;overflow:visible;pointer-events:none}
+.gj-line path{fill:none;stroke:rgba(95,224,196,.55);stroke-width:2;stroke-dasharray:8 10;animation:flow 1.2s linear infinite}
+@keyframes flow{to{stroke-dashoffset:-18}}
+.gj-step{position:relative;text-align:center;padding:0 6px}
+.gj-step.reveal{transition-delay:calc(var(--i)*140ms)}
+.gj-node{position:relative;width:68px;height:68px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;background:var(--bg);border:2px solid rgba(95,224,196,.5);box-shadow:0 0 0 8px var(--bg)}
+.gj-node::before{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--grad);opacity:.18;transition:opacity .4s}
+.gj-node span{position:relative;font:800 1.15rem Sora,sans-serif;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.gj-step:hover .gj-node::before{opacity:1}
+.gj-step:hover .gj-node span{-webkit-text-fill-color:#03121c;color:#03121c}
+.gj-step:hover .gj-node{animation:nodePulse 1.4s ease-out}
+@keyframes nodePulse{0%{box-shadow:0 0 0 8px var(--bg),0 0 0 8px rgba(95,224,196,.5)}100%{box-shadow:0 0 0 8px var(--bg),0 0 0 26px rgba(95,224,196,0)}}
+.gj-step h4{font:700 1.15rem Sora,sans-serif;margin-bottom:10px}
+.gj-step p{color:var(--muted);font-size:.93rem;margin-bottom:16px}
+.gj-tags{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.gj-tags span{padding:4px 10px;border-radius:999px;font-size:.74rem;font-weight:700;color:#c9f3ea;background:rgba(95,224,196,.08);border:1px solid rgba(95,224,196,.22)}
+.gj-foot{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:46px;padding:26px 30px;border-radius:20px;background:var(--panel);border:1px dashed rgba(95,224,196,.35)}
+.gj-foot p{color:#c9d6e2;max-width:620px}
+@media (max-width:1000px){
+  .gj-track{grid-template-columns:1fr;gap:0;padding-left:0}
+  .gj-line{display:none}
+  .gj-track::before{content:"";position:absolute;left:33px;top:40px;bottom:70px;border-left:2px dashed rgba(95,224,196,.45)}
+  .gj-step{display:grid;grid-template-columns:68px 1fr;column-gap:20px;text-align:left;padding:0 0 30px}
+  .gj-node{grid-row:span 3;margin:0}
+  .gj-tags{justify-content:flex-start}
+  .gj-foot{flex-direction:column;align-items:flex-start}
+}
 
 /* ===== holiday popup ===== */
 .hp-overlay{position:fixed;inset:0;z-index:300;display:grid;place-items:center;padding:20px;background:rgba(2,5,9,.72);backdrop-filter:blur(6px);opacity:0;transition:opacity .35s}
