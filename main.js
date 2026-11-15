@@ -1,0 +1,336 @@
+/* =========================================================
+   EDIT YOUR DETAILS HERE
+   ========================================================= */
+const CONFIG = {
+  whatsapp: "234XXXXXXXXXX",            // full number, country code first, digits only — e.g. 2348012345678
+  whatsappMessage: "Hi Clinton, I saw your portfolio and I'd like to talk about a website project.",
+  email: "your-email@example.com",     // your public business email
+};
+
+const PROJECTS = [
+  { name: "Ayadi — London MedSpa & Laser Clinic", url: "https://ayaditherapy.com/", cats: ["business"], tags: ["Elementor", "On-page SEO"], text: "Full Elementor build for a London medspa and laser clinic, with on-page SEO so treatments are easy to find." },
+  { name: "Revolution Beauty", url: "https://www.revolutionbeauty.com/", cats: ["ecommerce", "redesign"], tags: ["WooCommerce", "Redesign"], text: "WooCommerce redesign for a beauty e-commerce store — product-first layouts that look premium on every device." },
+  { name: "Headmasters Salons", url: "https://www.headmasters.com/", cats: ["business", "care"], tags: ["Development", "Migration"], text: "Development work and a full website migration for a salon group, moved safely with everything working on the other side." },
+  { name: "Rosy — Boutique Fitness Studio", url: "https://rosy-longevity.club/", cats: ["business"], tags: ["Bookings", "Memberships", "SEO"], text: "Class booking, memberships and SEO for a boutique fitness studio." },
+  { name: "Sunny Days Electrical", url: "https://sunnydayselectrical.com.au/", cats: ["care"], tags: ["Bug fixing", "Maintenance"], text: "Ongoing bug fixing and maintenance for an Australian electrical contractor." },
+  { name: "Scott Nelson Electric — Illinois", url: "https://ilelectrician.com/", cats: ["business"], tags: ["Elementor", "Service areas"], text: "Elementor build for a US electrician, with service-area pages and free-estimate requests to bring in local jobs." },
+  { name: "Swedencare UK — Pet Health", url: "https://uk.swedencare.com/", cats: ["ecommerce", "redesign"], tags: ["E-commerce", "Redesign"], text: "E-commerce redesign for a pet health and supplements store." },
+  { name: "Xpress Logistic", url: "https://www.xpresslogistic.co.uk/", cats: ["business", "redesign"], tags: ["Redesign"], text: "Redesign for a UK air cargo and logistics company — clearer services, stronger credibility." },
+  { name: "Verdantas", url: "https://www.verdantas.com/", cats: ["business"], tags: ["Development"], text: "Development work for an engineering and environmental consulting firm." },
+  { name: "Prime Home Trends", url: "https://primehometrends.ca/", cats: ["business"], tags: ["Web design"], text: "Website design for a tile, flooring and wall-panel showroom in Mississauga, Canada." },
+  { name: "Unite Clean", url: "https://uniteclean.co.uk/", cats: ["business"], tags: ["Web design"], text: "Website design for a London cleaning services company." },
+  { name: "Time to Help UK", url: "https://timetohelp.org.uk/news/", cats: ["business"], tags: ["Blog design"], text: "Blog page design for a UK charity, making news and stories easy to read." },
+];
+
+const REVIEWS = [
+  { text: "Clinton was great to work with again. He quickly fixed the header issue on my WordPress website mobile view and made sure everything was working properly and looking right across devices. He was responsive, professional, and completed the task exactly as I needed. I'd definitely work with him again and again.", job: "WordPress mobile header fix · Repeat client" },
+  { text: "Clinton did a great job with my WordPress website redesign using Elementor. He understood my requirements, made the changes, and delivered a clean and responsive design. The hero section redesign looked especially good on mobile, and he made sure everything worked properly without affecting the rest of the site. I would definitely hire Clinton again.", job: "Elementor website redesign" },
+  { text: "Clinton did an excellent job fixing the Elementor section on my website. He understood what needed to be done, communicated clearly, and completed the task quickly. I'm happy with the result and would gladly work with him again.", job: "Elementor section fix" },
+  { text: "Clinton did a great job updating my WordPress service page. He followed my instructions, and completed the work quickly. I'm happy with the result.", job: "WordPress service page update" },
+];
+
+/* ========================================================= */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isTouch = matchMedia("(hover: none)").matches;
+
+/* ---------- live screenshots (WordPress mShots) ---------- */
+function shotURL(url, { w = 1280, h = 960, mobile = false } = {}) {
+  const base = "https://s0.wp.com/mshots/v1/" + encodeURIComponent(url);
+  return mobile ? `${base}?vpw=414&vph=896&w=414&h=896` : `${base}?w=${w}&h=${h}`;
+}
+function loadShot(img, src, onReady, tries = 0) {
+  const probe = new Image();
+  probe.onload = () => {
+    // mShots returns a small placeholder while it generates the real capture
+    if (probe.naturalWidth <= 400 && tries < 6) {
+      setTimeout(() => loadShot(img, src, onReady, tries + 1), 3500);
+      return;
+    }
+    if (img) img.src = probe.src;
+    onReady && onReady(probe.src);
+  };
+  probe.onerror = () => tries < 6 && setTimeout(() => loadShot(img, src, onReady, tries + 1), 3500);
+  probe.src = src + (tries ? `&r=${tries}` : "");
+}
+
+/* ---------- contact links ---------- */
+(function contact() {
+  const wa = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.whatsappMessage)}`;
+  $("#waLink").href = wa; $("#waFloat").href = wa;
+  $("#mailLink").href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Website project enquiry")}`;
+  $("#mailText").textContent = CONFIG.email;
+  $("#year").textContent = new Date().getFullYear();
+})();
+
+/* ---------- nav ---------- */
+const nav = $(".nav"), burger = $("#burger"), links = $("#navLinks");
+burger.addEventListener("click", () => { burger.classList.toggle("open"); links.classList.toggle("open"); });
+$$("a", links).forEach(a => a.addEventListener("click", () => { burger.classList.remove("open"); links.classList.remove("open"); }));
+const prog = $(".scroll-progress");
+addEventListener("scroll", () => {
+  nav.classList.toggle("scrolled", scrollY > 40);
+  const max = document.documentElement.scrollHeight - innerHeight;
+  prog.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+}, { passive: true });
+
+/* ---------- cursor glow ---------- */
+const glow = $(".cursor-glow");
+if (!isTouch) addEventListener("pointermove", e => { glow.style.left = e.clientX + "px"; glow.style.top = e.clientY + "px"; });
+
+/* ---------- split headlines ---------- */
+$$(".split").forEach(h => {
+  const words = h.textContent.trim().split(/\s+/);
+  h.innerHTML = words.map((w, i) =>
+    `<span class="w${i >= words.length - 2 ? " grad" : ""}" style="--i:${i}"><span>${w}</span></span>`
+  ).join(" ");
+});
+
+/* ---------- HERO SLIDER ---------- */
+(function slider() {
+  const slides = $$(".slide"), bars = $("#bars"), now = $("#slideNow");
+  const DURATION = 7000;
+  let idx = 0, timer, startX = null;
+
+  slides.forEach((s, i) => {
+    const b = document.createElement("button");
+    b.setAttribute("aria-label", `Go to slide ${i + 1}`);
+    b.innerHTML = "<i></i>";
+    b.onclick = () => go(i);
+    bars.appendChild(b);
+    const bg = $(".slide-bg", s);
+    loadShot(null, shotURL(s.dataset.bg, { w: 1600, h: 1000 }), src => bg.style.backgroundImage = `url("${src}")`);
+  });
+  $$("[data-shot]").forEach(img => loadShot(img, shotURL(img.dataset.shot, { w: 1280, h: 900, mobile: img.hasAttribute("data-mobile") })));
+
+  function paintBars() {
+    $$("button", bars).forEach((b, i) => {
+      const bar = $("i", b);
+      bar.style.transition = "none";
+      bar.style.transform = `scaleX(${i < idx ? 1 : 0})`;
+      if (i === idx) {
+        void bar.offsetWidth;
+        bar.style.transition = `transform ${DURATION}ms linear`;
+        bar.style.transform = "scaleX(1)";
+      }
+    });
+  }
+  function go(n) {
+    const prev = slides[idx];
+    idx = (n + slides.length) % slides.length;
+    if (prev !== slides[idx]) {
+      prev.classList.add("leaving");
+      setTimeout(() => prev.classList.remove("leaving"), 700);
+      prev.classList.remove("is-active");
+      // restart layer animations
+      const next = slides[idx];
+      next.classList.remove("is-active"); void next.offsetWidth; next.classList.add("is-active");
+    }
+    now.textContent = String(idx + 1).padStart(2, "0");
+    paintBars();
+    if (slides[idx].querySelector(".typer")) runTyper(slides[idx].querySelector(".typer"));
+    clearTimeout(timer);
+    if (!reduced) timer = setTimeout(() => go(idx + 1), DURATION);
+  }
+  $(".arrow.next").onclick = () => go(idx + 1);
+  $(".arrow.prev").onclick = () => go(idx - 1);
+  addEventListener("keydown", e => {
+    if (scrollY > innerHeight * .6) return;
+    if (e.key === "ArrowRight") go(idx + 1);
+    if (e.key === "ArrowLeft") go(idx - 1);
+  });
+  const hero = $("#hero");
+  hero.addEventListener("touchstart", e => startX = e.touches[0].clientX, { passive: true });
+  hero.addEventListener("touchend", e => {
+    if (startX === null) return;
+    const dx = e.changedTouches[0].clientX - startX;
+    if (Math.abs(dx) > 50) go(idx + (dx < 0 ? 1 : -1));
+    startX = null;
+  });
+  document.addEventListener("visibilitychange", () => document.hidden ? clearTimeout(timer) : go(idx));
+  $$("[data-filter-link]").forEach(a => a.addEventListener("click", () => setFilter(a.dataset.filterLink)));
+  go(0);
+})();
+
+/* ---------- typer ---------- */
+let typerRun = 0;
+function runTyper(el) {
+  const run = ++typerRun;
+  const lines = JSON.parse(el.dataset.lines);
+  let out = "", li = 0, ci = 0;
+  el.innerHTML = '<span class="caret"></span>';
+  (function tick() {
+    if (run !== typerRun) return;
+    if (li >= lines.length) return;
+    const line = lines[li];
+    if (ci <= line.length) {
+      el.innerHTML = out + line.slice(0, ci) + '<span class="caret"></span>';
+      ci++; setTimeout(tick, 28);
+    } else {
+      out += line + "\n"; li++; ci = 0; setTimeout(tick, 260);
+    }
+  })();
+}
+
+/* ---------- particle network ---------- */
+(function particles() {
+  const c = $("#particles"), ctx = c.getContext("2d");
+  let W, H, pts = [], mouse = { x: -999, y: -999 };
+  const DPR = Math.min(devicePixelRatio || 1, 2);
+  function size() {
+    W = c.clientWidth; H = c.clientHeight;
+    c.width = W * DPR; c.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    const n = Math.min(90, Math.floor(W * H / 16000));
+    pts = Array.from({ length: n }, () => ({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4, r: Math.random() * 1.6 + .6 }));
+  }
+  size(); addEventListener("resize", size);
+  $("#hero").addEventListener("pointermove", e => { const r = c.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+  $("#hero").addEventListener("pointerleave", () => mouse.x = mouse.y = -999);
+  function frame() {
+    if (scrollY < innerHeight) {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of pts) {
+        const dx = mouse.x - p.x, dy = mouse.y - p.y, d = Math.hypot(dx, dy);
+        if (d < 160) { p.vx += dx / d * .02; p.vy += dy / d * .02; }
+        p.vx *= .99; p.vy *= .99;
+        p.x += p.vx + (Math.random() - .5) * .05; p.y += p.vy + (Math.random() - .5) * .05;
+        if (p.x < 0 || p.x > W) p.vx *= -1;
+        if (p.y < 0 || p.y > H) p.vy *= -1;
+      }
+      for (let i = 0; i < pts.length; i++) {
+        const a = pts[i];
+        for (let j = i + 1; j < pts.length; j++) {
+          const b = pts[j], d = Math.hypot(a.x - b.x, a.y - b.y);
+          if (d < 130) { ctx.strokeStyle = `rgba(95,224,196,${(1 - d / 130) * .25})`; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
+        }
+        ctx.fillStyle = "rgba(47,169,236,.8)"; ctx.beginPath(); ctx.arc(a.x, a.y, a.r, 0, 7); ctx.fill();
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  if (!reduced) frame();
+})();
+
+/* ---------- projects ---------- */
+function renderProjects() {
+  const grid = $("#projectGrid");
+  grid.innerHTML = PROJECTS.map((p, i) => `
+    <article class="project reveal" data-cats="${p.cats.join(" ")}">
+      <a class="shot" href="${p.url}" target="_blank" rel="noopener" aria-label="Visit ${p.name}">
+        <span class="visit">Visit live site ↗</span>
+        <img alt="Screenshot of ${p.name}" data-i="${i}" />
+      </a>
+      <div class="project-body">
+        <div class="tags">${p.tags.map(t => `<span>${t}</span>`).join("")}</div>
+        <h3>${p.name}</h3>
+        <p>${p.text}</p>
+      </div>
+    </article>`).join("");
+  // lazy-load screenshots as they approach the viewport
+  const io = new IntersectionObserver(entries => entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    io.unobserve(en.target);
+    const img = $("img", en.target), p = PROJECTS[img.dataset.i];
+    loadShot(img, shotURL(p.url, { w: 1280, h: 2600 }), () => en.target.classList.add("loaded"));
+  }), { rootMargin: "400px" });
+  $$(".shot", grid).forEach(s => io.observe(s));
+}
+renderProjects();
+
+function setFilter(f) {
+  $$(".filter").forEach(b => b.classList.toggle("is-on", b.dataset.filter === f));
+  $$(".project").forEach((p, i) => {
+    const show = f === "all" || p.dataset.cats.split(" ").includes(f);
+    p.classList.toggle("hide", !show);
+    p.classList.remove("pop");
+    if (show) { void p.offsetWidth; p.style.animationDelay = (i % 6) * 60 + "ms"; p.classList.add("pop", "in"); }
+  });
+}
+$$(".filter").forEach(b => b.addEventListener("click", () => setFilter(b.dataset.filter)));
+
+/* ---------- reviews carousel ---------- */
+(function reviews() {
+  const track = $("#reviewTrack"), dots = $("#reviewDots");
+  track.innerHTML = REVIEWS.map(r => `
+    <div class="review"><blockquote>${r.text}
+      <footer><span class="stars">★★★★★</span><span><b>Upwork client</b><small>${r.job}</small></span></footer>
+    </blockquote></div>`).join("");
+  let i = 0, t;
+  REVIEWS.forEach((_, n) => { const b = document.createElement("button"); b.setAttribute("aria-label", `Review ${n + 1}`); b.onclick = () => show(n); dots.appendChild(b); });
+  function show(n) {
+    i = (n + REVIEWS.length) % REVIEWS.length;
+    track.style.transform = `translateX(-${i * 100}%)`;
+    $$("button", dots).forEach((b, k) => b.classList.toggle("on", k === i));
+    clearTimeout(t); if (!reduced) t = setTimeout(() => show(i + 1), 6500);
+  }
+  let sx = null;
+  track.addEventListener("touchstart", e => sx = e.touches[0].clientX, { passive: true });
+  track.addEventListener("touchend", e => { if (sx === null) return; const dx = e.changedTouches[0].clientX - sx; if (Math.abs(dx) > 40) show(i + (dx < 0 ? 1 : -1)); sx = null; });
+  show(0);
+})();
+
+/* ---------- reveal + counters ---------- */
+const revealIO = new IntersectionObserver(entries => entries.forEach(en => {
+  if (!en.isIntersecting) return;
+  en.target.classList.add("in");
+  revealIO.unobserve(en.target);
+  const num = $("[data-count]", en.target);
+  if (num) countUp(num);
+}), { threshold: .15 });
+$$(".reveal").forEach(el => revealIO.observe(el));
+function countUp(el) {
+  const end = +el.dataset.count, suf = el.dataset.suffix || "", t0 = performance.now(), dur = 1600;
+  (function step(t) {
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = Math.round(end * e) + suf;
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+
+/* ---------- 3D tilt + spotlight cards ---------- */
+if (!isTouch) $$(".tilt").forEach(card => {
+  card.addEventListener("pointermove", e => {
+    const r = card.getBoundingClientRect(), x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    card.style.transform = `rotateY(${(x - .5) * 10}deg) rotateX(${(.5 - y) * 10}deg)`;
+    card.style.setProperty("--mx", x * 100 + "%"); card.style.setProperty("--my", y * 100 + "%");
+  });
+  card.addEventListener("pointerleave", () => card.style.transform = "");
+});
+
+/* ---------- magnetic buttons ---------- */
+if (!isTouch) $$(".magnetic").forEach(b => {
+  b.addEventListener("pointermove", e => {
+    const r = b.getBoundingClientRect();
+    b.style.transform = `translate(${(e.clientX - r.left - r.width / 2) * .25}px, ${(e.clientY - r.top - r.height / 2) * .35}px)`;
+  });
+  b.addEventListener("pointerleave", () => b.style.transform = "");
+});
+
+/* ---------- contact aurora ---------- */
+(function aurora() {
+  const c = $("#contactGlow"), ctx = c.getContext("2d");
+  const blobs = [
+    { c: "47,169,236", r: .55, s: .00031, o: 0 },
+    { c: "95,224,196", r: .45, s: .00023, o: 2 },
+    { c: "36,102,173", r: .6, s: .00017, o: 4 },
+  ];
+  let W, H, visible = false;
+  function size() { W = c.width = c.clientWidth; H = c.height = c.clientHeight; }
+  size(); addEventListener("resize", size);
+  new IntersectionObserver(([e]) => visible = e.isIntersecting).observe(c);
+  function frame(t) {
+    if (visible) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.globalCompositeOperation = "lighter";
+      for (const b of blobs) {
+        const x = W * (.5 + .38 * Math.sin(t * b.s + b.o)), y = H * (.5 + .35 * Math.cos(t * b.s * 1.3 + b.o));
+        const g = ctx.createRadialGradient(x, y, 0, x, y, Math.max(W, H) * b.r);
+        g.addColorStop(0, `rgba(${b.c},.28)`); g.addColorStop(1, `rgba(${b.c},0)`);
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      }
+    }
+    requestAnimationFrame(frame);
+  }
+  if (!reduced) requestAnimationFrame(frame);
+})();
