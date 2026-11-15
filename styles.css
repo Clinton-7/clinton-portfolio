@@ -278,8 +278,6 @@ section{position:relative;z-index:2}
 .contact-card:hover .ci{transform:rotate(-6deg) scale(1.06)}
 
 /* footer */
-.footer{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:80px 0 50px;color:var(--muted);font-size:.92rem;position:relative;z-index:2}
-.footer-logo{width:90px}
 .to-top{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;border:1px solid var(--line)}
 .wa-float svg{width:30px;height:30px}
 .wa-float{position:fixed;right:22px;bottom:22px;z-index:90;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;color:#fff;background:#25d366;box-shadow:0 10px 30px -6px rgba(37,211,102,.6);animation:pulseWa 2.4s infinite}
@@ -326,7 +324,6 @@ section{position:relative;z-index:2}
   .contact-card{min-width:0;width:100%}
   .row2{grid-template-columns:1fr}
   .contact-form{padding:20px}
-  .footer{flex-direction:column;text-align:center}
   .about-logo{right:10px;width:90px}
   .cursor-glow{display:none}
   .wa-float{width:52px;height:52px}
@@ -538,3 +535,27 @@ body.has-bar{--bar:46px}
   .cb-panel{position:fixed;right:12px;left:12px;bottom:158px;width:auto;height:min(520px,calc(100svh - 230px))}
   .cb-teaser{bottom:66px}
 }
+
+/* ===== footer ===== */
+.site-footer{position:relative;z-index:2;margin-top:120px;padding-top:0;overflow:hidden;background:linear-gradient(180deg,transparent,#060b11 18%);border-top:1px solid transparent;border-image:linear-gradient(90deg,transparent,rgba(95,224,196,.5),rgba(47,169,236,.5),transparent) 1}
+.ft-glow{position:absolute;left:50%;top:-220px;width:900px;height:440px;transform:translateX(-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(47,169,236,.16),transparent 65%);pointer-events:none}
+.ft-cta{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:56px 0 50px;border-bottom:1px solid var(--line)}
+.ft-cta h3{font-size:clamp(1.5rem,3vw,2.2rem);max-width:560px}
+.ft-grid{position:relative;display:grid;grid-template-columns:1.5fr 1fr 1fr 1.3fr;gap:40px;padding:56px 0 46px}
+.ft-brand p{color:var(--muted);font-size:.94rem;margin:18px 0 22px;max-width:340px}
+.ft-social{display:flex;gap:10px;margin-bottom:20px}
+.ft-social a{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;color:#c9d6e2;background:rgba(255,255,255,.04);border:1px solid var(--line);transition:transform .3s var(--ease),color .3s,border-color .3s,background .3s}
+.ft-social a svg{width:20px;height:20px}
+.ft-social a:hover{transform:translateY(-4px);color:#03121c;background:var(--grad);border-color:transparent}
+.ft-status{display:inline-flex;align-items:center;gap:4px;padding:7px 14px;border-radius:999px;background:rgba(61,220,132,.08);border:1px solid rgba(61,220,132,.25);font-size:.82rem;font-weight:600;color:#9be8bd}
+.ft-col h4{font-family:Sora;font-size:.95rem;margin-bottom:18px;color:#fff}
+.ft-col>a{display:block;width:fit-content;color:var(--muted);font-size:.93rem;margin-bottom:11px;position:relative;transition:color .25s,transform .25s var(--ease)}
+.ft-col>a:hover{color:var(--teal);transform:translateX(4px)}
+.ft-offer{color:#9ff5e2!important;font-weight:600}
+.ft-contact a,.ft-contact p{color:#c9d6e2!important;font-size:.92rem;margin-bottom:14px;word-break:break-word}
+.ft-contact span{display:block;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:#6c7f92;margin-bottom:2px}
+.ft-bottom{position:relative;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 0 34px;border-top:1px solid var(--line);color:var(--muted);font-size:.86rem}
+.ft-made{color:#6c7f92}
+.ft-word{position:relative;text-align:center;font:800 clamp(4rem,17vw,15rem)/.8 Sora,sans-serif;letter-spacing:-.04em;color:transparent;-webkit-text-stroke:1px rgba(95,224,196,.12);background:linear-gradient(180deg,rgba(47,169,236,.10),transparent 85%);-webkit-background-clip:text;background-clip:text;user-select:none;margin-bottom:-.12em;pointer-events:none}
+@media (max-width:1000px){.ft-grid{grid-template-columns:1fr 1fr}.ft-cta{flex-direction:column;align-items:flex-start}}
+@media (max-width:600px){.ft-grid{grid-template-columns:1fr 1fr;gap:32px 20px}.ft-brand,.ft-contact{grid-column:1/-1}.ft-bottom{flex-direction:column;text-align:center}.site-footer{margin-top:90px}}

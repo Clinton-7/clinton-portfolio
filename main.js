@@ -75,6 +75,7 @@ function loadShot(img, src, onReady, tries = 0) {
   const wa = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.whatsappMessage)}`;
   $("#waLink").href = wa; $("#waFloat").href = wa;
   $$(".wa-btn").forEach(a => a.href = wa);
+  $$(".mail-btn").forEach(a => a.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Website project enquiry")}`);
   $("#mailLink").href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Website project enquiry")}`;
   $("#mailText").textContent = CONFIG.email;
   $("#year").textContent = new Date().getFullYear();
