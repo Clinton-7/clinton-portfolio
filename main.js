@@ -362,21 +362,38 @@ $("#flags").innerHTML = COUNTRIES.map((c, i) => `
   show(0);
 })();
 
-/* ---------- reveal + counters ---------- */
+/* ---------- reveal ---------- */
 const revealIO = new IntersectionObserver(entries => entries.forEach(en => {
   if (!en.isIntersecting) return;
   en.target.classList.add("in");
   revealIO.unobserve(en.target);
-  const num = $("[data-count]", en.target);
-  if (num) countUp(num);
 }), { threshold: .15 });
 $$(".reveal").forEach(el => revealIO.observe(el));
-function countUp(el) {
-  const end = +el.dataset.count, suf = el.dataset.suffix || "", t0 = performance.now(), dur = 1600;
+
+/* ---------- stat counters: replay every time they come into view ---------- */
+const statRuns = new WeakMap();
+const statsIO = new IntersectionObserver(entries => entries.forEach(en => {
+  const card = en.target, num = $("[data-count]", card);
+  if (en.isIntersecting) {
+    const delay = [...card.parentNode.children].indexOf(card) * 180;
+    setTimeout(() => countUp(num, card), delay);
+  } else {
+    statRuns.set(num, (statRuns.get(num) || 0) + 1); // cancel any run in progress
+    num.textContent = "0" + (num.dataset.suffix || "");
+    card.classList.remove("landed");
+  }
+}), { threshold: .6 });
+$$(".stat").forEach(s => statsIO.observe(s));
+function countUp(el, card) {
+  const run = (statRuns.get(el) || 0) + 1; statRuns.set(el, run);
+  const end = +el.dataset.count, suf = el.dataset.suffix || "", t0 = performance.now(), dur = reduced ? 1 : 2500;
+  card.classList.remove("landed");
   (function step(t) {
-    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    if (statRuns.get(el) !== run) return;
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4);
     el.textContent = Math.round(end * e) + suf;
     if (k < 1) requestAnimationFrame(step);
+    else { void card.offsetWidth; card.classList.add("landed"); }
   })(t0);
 }
 

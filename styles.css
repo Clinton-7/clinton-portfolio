@@ -141,6 +141,13 @@ em{font-style:normal;background:var(--grad);-webkit-background-clip:text;backgro
 .stat{padding:28px;border-radius:var(--radius);background:var(--panel);border:1px solid var(--line)}
 .stat b{display:block;font-family:Sora;font-size:clamp(2.4rem,4vw,3.4rem);background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;line-height:1.1}
 .stat span{color:var(--muted);font-size:.95rem}
+.stat{position:relative;transition:border-color .4s,box-shadow .4s}
+.stat::after{content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;opacity:0;box-shadow:0 0 0 1px rgba(95,224,196,.6),0 0 40px -6px rgba(47,169,236,.55)}
+.stat.landed::after{animation:statGlow 1.6s var(--ease)}
+.stat.landed b{animation:statPop .5s var(--ease)}
+@keyframes statGlow{0%{opacity:0}25%{opacity:1}100%{opacity:0}}
+@keyframes statPop{50%{transform:scale(1.08)}}
+.stat b{transform-origin:left center}
 
 /* sections */
 section{position:relative;z-index:2}
