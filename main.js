@@ -5,6 +5,7 @@ const CONFIG = {
   whatsapp: "2349069288459",            // full number, country code first, digits only
   whatsappMessage: "Hi Clinton, I saw your portfolio and I'd like to talk about a website project.",
   email: "nnoshiriclinton10@gmail.com",
+  calendly: "",                         // your Calendly booking link, e.g. https://calendly.com/your-name/30min
 };
 
 const PROJECTS = [
@@ -73,6 +74,79 @@ function loadShot(img, src, onReady, tries = 0) {
   $("#mailLink").href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Website project enquiry")}`;
   $("#mailText").textContent = CONFIG.email;
   $("#year").textContent = new Date().getFullYear();
+})();
+
+/* ---------- Calendly ---------- */
+(function calendly() {
+  const triggers = [$("#calendlyBtn"), ...$$("[data-calendly]")];
+  if (!CONFIG.calendly) { triggers.forEach(t => t.hidden = true); return; }
+  let loading;
+  function loadWidget() {
+    if (window.Calendly) return Promise.resolve();
+    if (loading) return loading;
+    const css = document.createElement("link");
+    css.rel = "stylesheet"; css.href = "https://assets.calendly.com/assets/external/widget.css";
+    document.head.appendChild(css);
+    loading = new Promise((res, rej) => {
+      const s = document.createElement("script");
+      s.src = "https://assets.calendly.com/assets/external/widget.js";
+      s.onload = res; s.onerror = rej;
+      document.head.appendChild(s);
+    });
+    return loading;
+  }
+  triggers.forEach(t => {
+    t.href = CONFIG.calendly; t.target = "_blank"; t.rel = "noopener";
+    t.addEventListener("pointerenter", loadWidget, { once: true });
+    t.addEventListener("click", e => {
+      e.preventDefault();
+      loadWidget()
+        .then(() => window.Calendly.initPopupWidget({ url: CONFIG.calendly + (CONFIG.calendly.includes("?") ? "&" : "?") + "hide_gdpr_banner=1&background_color=0e1621&text_color=e9f1f7&primary_color=5fe0c4" }))
+        .catch(() => window.open(CONFIG.calendly, "_blank", "noopener"));
+    });
+  });
+})();
+
+/* ---------- contact form (delivered by FormSubmit to CONFIG.email) ---------- */
+(function contactForm() {
+  const form = $("#contactForm"), status = $("#formStatus"), btn = $(".submit", form), label = $(".label", btn);
+  const setStatus = (msg, cls = "") => { status.textContent = msg; status.className = "form-status " + cls; };
+  form.addEventListener("input", e => e.target.closest(".field")?.classList.remove("invalid"));
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    let ok = true;
+    $$("[required]", form).forEach(f => {
+      const bad = !f.value.trim() || (f.type === "email" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.value));
+      f.closest(".field").classList.toggle("invalid", bad);
+      if (bad) ok = false;
+    });
+    if (!ok) return setStatus("Please fill in the highlighted fields.", "err");
+    const data = Object.fromEntries(new FormData(form));
+    if (data._honey) return; // bot
+    btn.classList.add("loading"); label.textContent = "Sending…"; setStatus("");
+    try {
+      const res = await fetch(`https://formsubmit.co/ajax/${CONFIG.email}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          Name: data.name, Email: data.email, Service: data.service,
+          Budget: data.budget || "Not sure yet", Website: data.website || "—", Message: data.message,
+          _replyto: data.email, _subject: `New project enquiry from ${data.name}`, _template: "table", _captcha: "false",
+        }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || String(out.success) !== "true") throw new Error(out.message || "Failed");
+      form.reset();
+      label.textContent = "Message sent ✓";
+      setStatus(`Thanks, ${data.name.split(" ")[0]}! I'll get back to you shortly.`, "ok");
+      setTimeout(() => label.textContent = "Send message", 4000);
+    } catch (err) {
+      label.textContent = "Send message";
+      setStatus("Sorry, that didn't go through. Please message me on WhatsApp or email instead.", "err");
+    } finally {
+      btn.classList.remove("loading");
+    }
+  });
 })();
 
 /* ---------- nav ---------- */
