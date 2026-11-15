@@ -83,6 +83,7 @@ function loadShot(img, src, onReady, tries = 0) {
 /* ---------- Calendly ---------- */
 (function calendly() {
   const triggers = [$("#calendlyBtn"), ...$$("[data-calendly]")];
+  window.openCalendly = () => document.querySelector("#contact").scrollIntoView({ behavior: "smooth" });
   if (!CONFIG.calendly) { triggers.forEach(t => t.hidden = true); return; }
   let loading;
   function loadWidget() {
@@ -94,20 +95,19 @@ function loadShot(img, src, onReady, tries = 0) {
     loading = new Promise((res, rej) => {
       const s = document.createElement("script");
       s.src = "https://assets.calendly.com/assets/external/widget.js";
-      s.onload = res; s.onerror = rej;
+      s.onload = res; s.onerror = e => { loading = null; rej(e); };
       document.head.appendChild(s);
     });
     return loading;
   }
+  window.openCalendly = () => loadWidget()
+    .then(() => window.Calendly.initPopupWidget({ url: CONFIG.calendly + (CONFIG.calendly.includes("?") ? "&" : "?") + "hide_gdpr_banner=1&background_color=0e1621&text_color=e9f1f7&primary_color=5fe0c4" }))
+    .catch(() => window.open(CONFIG.calendly, "_blank", "noopener"));
+  window.warmCalendly = loadWidget;
   triggers.forEach(t => {
     t.href = CONFIG.calendly; t.target = "_blank"; t.rel = "noopener";
-    t.addEventListener("pointerenter", loadWidget, { once: true });
-    t.addEventListener("click", e => {
-      e.preventDefault();
-      loadWidget()
-        .then(() => window.Calendly.initPopupWidget({ url: CONFIG.calendly + (CONFIG.calendly.includes("?") ? "&" : "?") + "hide_gdpr_banner=1&background_color=0e1621&text_color=e9f1f7&primary_color=5fe0c4" }))
-        .catch(() => window.open(CONFIG.calendly, "_blank", "noopener"));
-    });
+    t.addEventListener("pointerenter", () => loadWidget().catch(() => {}), { once: true });
+    t.addEventListener("click", e => { e.preventDefault(); window.openCalendly(); });
   });
 })();
 
