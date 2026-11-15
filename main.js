@@ -5,7 +5,7 @@ const CONFIG = {
   whatsapp: "2349069288459",            // full number, country code first, digits only
   whatsappMessage: "Hi Clinton, I saw your portfolio and I'd like to talk about a website project.",
   email: "nnoshiriclinton10@gmail.com",
-  calendly: "",                         // your Calendly booking link, e.g. https://calendly.com/your-name/30min
+  calendly: "https://calendly.com/nnoshiriclinton10/30min",                         // your Calendly booking link, e.g. https://calendly.com/your-name/30min
 };
 
 const PROJECTS = [
