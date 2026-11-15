@@ -2,9 +2,9 @@
    EDIT YOUR DETAILS HERE
    ========================================================= */
 const CONFIG = {
-  whatsapp: "234XXXXXXXXXX",            // full number, country code first, digits only — e.g. 2348012345678
+  whatsapp: "2349069288459",            // full number, country code first, digits only
   whatsappMessage: "Hi Clinton, I saw your portfolio and I'd like to talk about a website project.",
-  email: "your-email@example.com",     // your public business email
+  email: "nnoshiriclinton10@gmail.com",
 };
 
 const PROJECTS = [
