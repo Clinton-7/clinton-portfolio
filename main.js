@@ -54,30 +54,32 @@ function shotURL(url, { w = 1280, h = 960, mobile = false } = {}) {
   const base = "https://s0.wp.com/mshots/v1/" + encodeURIComponent(url);
   return mobile ? `${base}?vpw=414&vph=896&w=414&h=896` : `${base}?w=${w}&h=${h}`;
 }
+// Load screenshots two at a time (the screenshot service stalls on big bursts)
+const shotQueue = []; let shotActive = 0;
+function runShotQueue() {
+  while (shotActive < 2 && shotQueue.length) {
+    const job = shotQueue.shift(); shotActive++;
+    job().finally(() => { shotActive--; runShotQueue(); });
+  }
+}
 function loadShot(img, src, onReady, tries = 0) {
   // mShots returns a "Generating Preview…" GIF while it captures a site, and a small
-  // error JPEG if it can't. Only show a real screenshot; otherwise retry quietly.
-  const retry = () => { if (tries < 12) setTimeout(() => loadShot(img, src, onReady, tries + 1), 4000); };
-  const url = src; // same URL each retry (a changed URL makes mShots start a new capture)
-  fetch(url, { mode: "cors", cache: "no-store" })
-    .then(r => r.ok ? r.blob() : Promise.reject(r.status))
-    .then(blob => {
-      if (/gif/.test(blob.type) || blob.size < 35000) return retry();
-      const obj = URL.createObjectURL(blob);
-      if (img) img.src = obj;
-      onReady && onReady(obj);
-    })
-    .catch(() => {
-      // fallback if the browser blocks the fetch: size check only
-      const probe = new Image();
-      probe.onload = () => {
-        if (probe.naturalWidth <= 400) return retry();
-        if (img) img.src = probe.src;
-        onReady && onReady(probe.src);
-      };
-      probe.onerror = retry;
-      probe.src = url;
-    });
+  // error image if it can't. Only show a real screenshot; otherwise retry quietly.
+  const retry = () => { if (tries < 10) setTimeout(() => loadShot(img, src, onReady, tries + 1), 5000); };
+  shotQueue.push(() => {
+    const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 15000);
+    return fetch(src, { mode: "cors", signal: ctrl.signal })
+      .then(r => r.ok ? r.blob() : Promise.reject(r.status))
+      .then(blob => {
+        if (/gif/.test(blob.type) || blob.size < 35000) return retry();
+        const obj = URL.createObjectURL(blob);
+        if (img) img.src = obj;
+        onReady && onReady(obj);
+      })
+      .catch(retry)
+      .finally(() => clearTimeout(timer));
+  });
+  runShotQueue();
 }
 
 /* ---------- contact links ---------- */
