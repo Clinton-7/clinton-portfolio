@@ -73,7 +73,7 @@ function loadShot(img, src, onReady, tries = 0) {
 /* ---------- contact links ---------- */
 (function contact() {
   const wa = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.whatsappMessage)}`;
-  $("#waLink").href = wa; $("#waFloat").href = wa;
+  $("#waLink").href = wa;
   $$(".wa-btn").forEach(a => a.href = wa);
   $$(".mail-btn").forEach(a => a.href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Website project enquiry")}`);
   $("#mailLink").href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Website project enquiry")}`;
@@ -173,7 +173,7 @@ function loadShot(img, src, onReady, tries = 0) {
   }
   if (!active()) { applyPrices(false); return; }
 
-  section.hidden = false;
+  if (section) section.hidden = false;
   if (!dismissed) { bar.hidden = false; document.body.classList.add("has-bar"); }
   $("#promoClose").addEventListener("click", () => {
     bar.hidden = true; document.body.classList.remove("has-bar");
@@ -186,7 +186,7 @@ function loadShot(img, src, onReady, tries = 0) {
   $$("[data-countdown='full'] b").forEach(b => units[b.dataset.u] = b);
   function tick() {
     const left = end - Date.now();
-    if (left <= 0) { bar.hidden = true; section.hidden = true; document.body.classList.remove("has-bar"); applyPrices(false); return; }
+    if (left <= 0) { bar.hidden = true; if (section) section.hidden = true; document.body.classList.remove("has-bar"); applyPrices(false); return; }
     const d = Math.floor(left / 864e5), h = Math.floor(left / 36e5) % 24, m = Math.floor(left / 6e4) % 60, s = Math.floor(left / 1e3) % 60;
     short.textContent = `${d}d ${pad(h)}h ${pad(m)}m ${pad(s)}s`;
     const vals = { d: pad(d), h: pad(h), m: pad(m), s: pad(s) };
@@ -209,7 +209,7 @@ $$(".plan-btn").forEach(btn => btn.addEventListener("click", () => {
   if (!msg.value.trim()) msg.value = btn.closest(".problem")
     ? `Hi Clinton, my website has this problem: ${btn.closest(".problem").querySelector("h3").textContent}. Can you help? `
     : btn.dataset.plan === "Digital Marketing" ? "Hi Clinton, I'd like to know more about your digital marketing services. "
-    : `Hi Clinton, I'm interested in the ${btn.dataset.plan} package.` + (!$("#offer").hidden ? " I'd like to claim the holiday 20% discount." : "") + " ";
+    : `Hi Clinton, I'm interested in the ${btn.dataset.plan} package.` + (Date.now() < new Date(OFFER.ends).getTime() ? " I'd like to claim the holiday 20% discount." : "") + " ";
   setTimeout(() => $("input[name=name]", form).focus({ preventScroll: true }), 900);
 }));
 
@@ -399,11 +399,8 @@ function setFilter(f) {
 $$(".filter").forEach(b => b.addEventListener("click", () => setFilter(b.dataset.filter)));
 
 /* ---------- countries ---------- */
-$("#flags").innerHTML = COUNTRIES.map((c, i) => `
-  <div class="flag reveal" style="--i:${i}">
-    <img src="https://flagcdn.com/${c.code}.svg" alt="Flag of ${c.name}" width="64" height="44" loading="lazy" />
-    <span>${c.name}</span>
-  </div>`).join("");
+$("#flags").innerHTML = COUNTRIES.map(c =>
+  `<img src="https://flagcdn.com/${c.code}.svg" alt="${c.name}" title="${c.name}" width="26" height="18" loading="lazy" />`).join("");
 
 /* ---------- reviews carousel ---------- */
 (function reviews() {
