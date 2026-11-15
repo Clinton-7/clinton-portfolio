@@ -145,8 +145,12 @@ function loadShot(img, src, onReady, tries = 0) {
       setStatus(`Thanks, ${data.name.split(" ")[0]}! I'll get back to you shortly.`, "ok");
       setTimeout(() => label.textContent = "Send message", 4000);
     } catch (err) {
+      console.warn("Form not sent:", err && err.message);
       label.textContent = "Send message";
-      setStatus("Sorry, that didn't go through. Please message me on WhatsApp or email instead.", "err");
+      // Never lose the lead: offer to send the same message on WhatsApp in one tap
+      const text = `Hi Clinton, I'm ${data.name} (${data.email}).\nService: ${data.service}\nBudget: ${data.budget || "Not sure yet"}\nWebsite: ${data.website || "—"}\n\n${data.message}`;
+      status.className = "form-status err";
+      status.innerHTML = `Sorry, the form couldn't send just now. <a class="form-wa" target="_blank" rel="noopener" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(text)}">Send this message on WhatsApp instead →</a>`;
     } finally {
       btn.classList.remove("loading");
     }
