@@ -29,6 +29,17 @@ const REVIEWS = [
   { text: "Clinton did a great job updating my WordPress service page. He followed my instructions, and completed the work quickly. I'm happy with the result.", job: "WordPress service page update" },
 ];
 
+// Countries served — code is the 2-letter country code (used for the flag image)
+const COUNTRIES = [
+  { code: "gb", name: "United Kingdom" },
+  { code: "us", name: "United States" },
+  { code: "ca", name: "Canada" },
+  { code: "au", name: "Australia" },
+  { code: "ae", name: "United Arab Emirates" },
+  { code: "de", name: "Germany" },
+  { code: "nl", name: "Netherlands" },
+];
+
 /* ========================================================= */
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -248,6 +259,13 @@ function setFilter(f) {
   });
 }
 $$(".filter").forEach(b => b.addEventListener("click", () => setFilter(b.dataset.filter)));
+
+/* ---------- countries ---------- */
+$("#flags").innerHTML = COUNTRIES.map((c, i) => `
+  <div class="flag reveal" style="--i:${i}">
+    <img src="https://flagcdn.com/${c.code}.svg" alt="Flag of ${c.name}" width="64" height="44" loading="lazy" />
+    <span>${c.name}</span>
+  </div>`).join("");
 
 /* ---------- reviews carousel ---------- */
 (function reviews() {
