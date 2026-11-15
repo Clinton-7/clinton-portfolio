@@ -55,18 +55,29 @@ function shotURL(url, { w = 1280, h = 960, mobile = false } = {}) {
   return mobile ? `${base}?vpw=414&vph=896&w=414&h=896` : `${base}?w=${w}&h=${h}`;
 }
 function loadShot(img, src, onReady, tries = 0) {
-  // mShots shows a "Generating Preview…" placeholder while it captures the site.
-  // Only accept an image whose shape matches what we asked for; otherwise retry quietly.
-  const u = new URL(src), w = +(u.searchParams.get("w") || 1280), h = +(u.searchParams.get("h") || 960);
-  const probe = new Image();
-  probe.onload = () => {
-    const ok = probe.naturalWidth > 0 && Math.abs(probe.naturalHeight / probe.naturalWidth - h / w) < 0.12 && probe.naturalWidth >= w * 0.9;
-    if (!ok) { if (tries < 12) setTimeout(() => loadShot(img, src, onReady, tries + 1), 4000); return; }
-    if (img) img.src = probe.src;
-    onReady && onReady(probe.src);
-  };
-  probe.onerror = () => tries < 12 && setTimeout(() => loadShot(img, src, onReady, tries + 1), 4000);
-  probe.src = src + (tries ? `&r=${tries}` : "");
+  // mShots returns a "Generating Preview…" GIF while it captures a site, and a small
+  // error JPEG if it can't. Only show a real screenshot; otherwise retry quietly.
+  const retry = () => { if (tries < 12) setTimeout(() => loadShot(img, src, onReady, tries + 1), 4000); };
+  const url = src + (tries ? `&r=${tries}` : "");
+  fetch(url, { mode: "cors" })
+    .then(r => r.ok ? r.blob() : Promise.reject(r.status))
+    .then(blob => {
+      if (/gif/.test(blob.type) || blob.size < 35000) return retry();
+      const obj = URL.createObjectURL(blob);
+      if (img) img.src = obj;
+      onReady && onReady(obj);
+    })
+    .catch(() => {
+      // fallback if the browser blocks the fetch: size check only
+      const probe = new Image();
+      probe.onload = () => {
+        if (probe.naturalWidth <= 400) return retry();
+        if (img) img.src = probe.src;
+        onReady && onReady(probe.src);
+      };
+      probe.onerror = retry;
+      probe.src = url;
+    });
 }
 
 /* ---------- contact links ---------- */
@@ -384,7 +395,7 @@ function renderProjects() {
     if (!en.isIntersecting) return;
     io.unobserve(en.target);
     const img = $("img", en.target), p = PROJECTS[img.dataset.i];
-    loadShot(img, shotURL(p.url, { w: 1280, h: 2600 }), () => en.target.classList.add("loaded"));
+    loadShot(img, shotURL(p.url, { w: 1280, h: 960 }), () => en.target.classList.add("loaded"));
   }), { rootMargin: "400px" });
   $$(".shot", grid).forEach(s => io.observe(s));
 }
