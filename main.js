@@ -207,6 +207,7 @@ $$(".plan-btn").forEach(btn => btn.addEventListener("click", () => {
   sel.value = btn.dataset.service;
   if (!msg.value.trim()) msg.value = btn.closest(".problem")
     ? `Hi Clinton, my website has this problem: ${btn.closest(".problem").querySelector("h3").textContent}. Can you help? `
+    : btn.dataset.plan === "Digital Marketing" ? "Hi Clinton, I'd like to know more about your digital marketing services. "
     : `Hi Clinton, I'm interested in the ${btn.dataset.plan} package.` + (!$("#offer").hidden ? " I'd like to claim the holiday 20% discount." : "") + " ";
   setTimeout(() => $("input[name=name]", form).focus({ preventScroll: true }), 900);
 }));
