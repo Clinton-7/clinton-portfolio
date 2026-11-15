@@ -20,7 +20,6 @@ const PROJECTS = [
   { name: "Verdantas", url: "https://www.verdantas.com/", cats: ["business"], tags: ["Development"], text: "Development work for an engineering and environmental consulting firm." },
   { name: "Prime Home Trends", url: "https://primehometrends.ca/", cats: ["business"], tags: ["Web design"], text: "Website design for a tile, flooring and wall-panel showroom in Mississauga, Canada." },
   { name: "Unite Clean", url: "https://uniteclean.co.uk/", cats: ["business"], tags: ["Web design"], text: "Website design for a London cleaning services company." },
-  { name: "Time to Help UK", url: "https://timetohelp.org.uk/news/", cats: ["business"], tags: ["Blog design"], text: "Blog page design for a UK charity, making news and stories easy to read." },
 ];
 
 const REVIEWS = [
@@ -56,17 +55,17 @@ function shotURL(url, { w = 1280, h = 960, mobile = false } = {}) {
   return mobile ? `${base}?vpw=414&vph=896&w=414&h=896` : `${base}?w=${w}&h=${h}`;
 }
 function loadShot(img, src, onReady, tries = 0) {
+  // mShots shows a "Generating Preview…" placeholder while it captures the site.
+  // Only accept an image whose shape matches what we asked for; otherwise retry quietly.
+  const u = new URL(src), w = +(u.searchParams.get("w") || 1280), h = +(u.searchParams.get("h") || 960);
   const probe = new Image();
   probe.onload = () => {
-    // mShots returns a small placeholder while it generates the real capture
-    if (probe.naturalWidth <= 400 && tries < 6) {
-      setTimeout(() => loadShot(img, src, onReady, tries + 1), 3500);
-      return;
-    }
+    const ok = probe.naturalWidth > 0 && Math.abs(probe.naturalHeight / probe.naturalWidth - h / w) < 0.12 && probe.naturalWidth >= w * 0.9;
+    if (!ok) { if (tries < 12) setTimeout(() => loadShot(img, src, onReady, tries + 1), 4000); return; }
     if (img) img.src = probe.src;
     onReady && onReady(probe.src);
   };
-  probe.onerror = () => tries < 6 && setTimeout(() => loadShot(img, src, onReady, tries + 1), 3500);
+  probe.onerror = () => tries < 12 && setTimeout(() => loadShot(img, src, onReady, tries + 1), 4000);
   probe.src = src + (tries ? `&r=${tries}` : "");
 }
 
@@ -366,7 +365,7 @@ function renderProjects() {
   const grid = $("#projectGrid");
   grid.innerHTML = PROJECTS.map((p, i) => `
     <article class="project reveal" data-cats="${p.cats.join(" ")}">
-      <a class="shot" href="${p.url}" target="_blank" rel="noopener" aria-label="Visit ${p.name}">
+      <a class="shot" data-host="${new URL(p.url).hostname.replace(/^www\./, "")}" href="${p.url}" target="_blank" rel="noopener" aria-label="Visit ${p.name}">
         <span class="visit">Visit live site ↗</span>
         <img alt="Screenshot of ${p.name}" data-i="${i}" />
       </a>
