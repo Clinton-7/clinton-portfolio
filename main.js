@@ -58,8 +58,8 @@ function loadShot(img, src, onReady, tries = 0) {
   // mShots returns a "Generating Preview…" GIF while it captures a site, and a small
   // error JPEG if it can't. Only show a real screenshot; otherwise retry quietly.
   const retry = () => { if (tries < 12) setTimeout(() => loadShot(img, src, onReady, tries + 1), 4000); };
-  const url = src + (tries ? `&r=${tries}` : "");
-  fetch(url, { mode: "cors" })
+  const url = src; // same URL each retry (a changed URL makes mShots start a new capture)
+  fetch(url, { mode: "cors", cache: "no-store" })
     .then(r => r.ok ? r.blob() : Promise.reject(r.status))
     .then(blob => {
       if (/gif/.test(blob.type) || blob.size < 35000) return retry();
