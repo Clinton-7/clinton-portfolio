@@ -20,6 +20,16 @@
   <div class="cursor-glow" aria-hidden="true"></div>
 
   <!-- NAV -->
+  <div class="promo-bar" id="promoBar" hidden>
+    <a href="#offer" class="promo-link">
+      <span class="promo-tag">Holiday offer</span>
+      <span class="promo-text"><b>20% off</b> all website packages + a <b>free website audit</b></span>
+      <span class="promo-clock" data-countdown="short"></span>
+      <span class="promo-cta">Claim it →</span>
+    </a>
+    <button class="promo-close" id="promoClose" aria-label="Dismiss offer">×</button>
+  </div>
+
   <header class="nav">
     <a href="#top" class="brand">
       <img src="/assets/mark.png" alt="" width="44" height="30" />
@@ -28,6 +38,7 @@
     <nav class="nav-links" id="navLinks">
       <a href="#work">Work</a>
       <a href="#services">Services</a>
+      <a href="#pricing">Pricing</a>
       <a href="#about">About</a>
       <a href="#reviews">Reviews</a>
       <a href="#contact" class="btn btn-sm magnetic">Hire me</a>
@@ -143,6 +154,123 @@
       <div class="flags" id="flags"></div>
     </section>
 
+    <!-- PROBLEMS -->
+    <section class="problems wrap" id="problems">
+      <div class="section-head reveal">
+        <p class="eyebrow">Sound familiar?</p>
+        <h2>Is your website <em>costing you customers?</em></h2>
+        <p class="muted">These are the problems I fix most often. If even one sounds like your site, you're losing enquiries every week.</p>
+      </div>
+      <div class="pb-grid">
+        <div class="problem reveal" style="--i:0" tabindex="0">
+          <div class="pb-inner">
+            <div class="pb-face pb-front">
+              <span class="pb-x" aria-hidden="true">✕</span>
+              <h3>Your site looks older than your business</h3>
+              <p>Visitors judge you in seconds. A dated design makes even excellent work look second-rate.</p>
+              <span class="pb-hint">See the fix ↻</span>
+            </div>
+            <div class="pb-face pb-back">
+              <span class="pb-ok" aria-hidden="true">✓</span>
+              <h3>The fix</h3>
+              <p>A modern redesign that matches the quality of your work — without losing your content or rankings.</p>
+              <a href="#contact" class="pb-cta plan-btn" data-service="Website redesign" data-plan="your site looks older than your business fix">Fix this for me →</a>
+            </div>
+          </div>
+        </div>
+        <div class="problem reveal" style="--i:1" tabindex="0">
+          <div class="pb-inner">
+            <div class="pb-face pb-front">
+              <span class="pb-x" aria-hidden="true">✕</span>
+              <h3>It takes forever to load</h3>
+              <p>Every extra second sends people back to Google — straight to your competitor.</p>
+              <span class="pb-hint">See the fix ↻</span>
+            </div>
+            <div class="pb-face pb-back">
+              <span class="pb-ok" aria-hidden="true">✓</span>
+              <h3>The fix</h3>
+              <p>Speed optimisation: lighter images, caching and clean code so pages load in a blink.</p>
+              <a href="#contact" class="pb-cta plan-btn" data-service="Speed / security" data-plan="it takes forever to load fix">Fix this for me →</a>
+            </div>
+          </div>
+        </div>
+        <div class="problem reveal" style="--i:2" tabindex="0">
+          <div class="pb-inner">
+            <div class="pb-face pb-front">
+              <span class="pb-x" aria-hidden="true">✕</span>
+              <h3>It breaks on phones</h3>
+              <p>Most of your visitors are on mobile. Squashed menus and overlapping text make them leave.</p>
+              <span class="pb-hint">See the fix ↻</span>
+            </div>
+            <div class="pb-face pb-back">
+              <span class="pb-ok" aria-hidden="true">✓</span>
+              <h3>The fix</h3>
+              <p>Fully responsive layouts, tested on real phone, tablet and desktop sizes.</p>
+              <a href="#contact" class="pb-cta plan-btn" data-service="Bug fix or maintenance" data-plan="it breaks on phones fix">Fix this for me →</a>
+            </div>
+          </div>
+        </div>
+        <div class="problem reveal" style="--i:3" tabindex="0">
+          <div class="pb-inner">
+            <div class="pb-face pb-front">
+              <span class="pb-x" aria-hidden="true">✕</span>
+              <h3>People visit, but nobody gets in touch</h3>
+              <p>No clear next step, a hidden phone number, no booking button — so ready buyers walk away.</p>
+              <span class="pb-hint">See the fix ↻</span>
+            </div>
+            <div class="pb-face pb-back">
+              <span class="pb-ok" aria-hidden="true">✓</span>
+              <h3>The fix</h3>
+              <p>Clear calls to action, click-to-call, WhatsApp and booking built into every page.</p>
+              <a href="#contact" class="pb-cta plan-btn" data-service="Website redesign" data-plan="people visit, but nobody gets in touch fix">Fix this for me →</a>
+            </div>
+          </div>
+        </div>
+        <div class="problem reveal" style="--i:4" tabindex="0">
+          <div class="pb-inner">
+            <div class="pb-face pb-front">
+              <span class="pb-x" aria-hidden="true">✕</span>
+              <h3>Your contact form quietly stopped working</h3>
+              <p>Enquiries vanish or land in spam, and you only find out when a customer complains.</p>
+              <span class="pb-hint">See the fix ↻</span>
+            </div>
+            <div class="pb-face pb-back">
+              <span class="pb-ok" aria-hidden="true">✓</span>
+              <h3>The fix</h3>
+              <p>Forms tested end to end, with notifications that reliably reach your inbox.</p>
+              <a href="#contact" class="pb-cta plan-btn" data-service="Bug fix or maintenance" data-plan="your contact form quietly stopped working fix">Fix this for me →</a>
+            </div>
+          </div>
+        </div>
+        <div class="problem reveal" style="--i:5" tabindex="0">
+          <div class="pb-inner">
+            <div class="pb-face pb-front">
+              <span class="pb-x" aria-hidden="true">✕</span>
+              <h3>An update broke something and you're stuck</h3>
+              <p>A plugin or theme update broke your layout — and nobody is there to fix it.</p>
+              <span class="pb-hint">See the fix ↻</span>
+            </div>
+            <div class="pb-face pb-back">
+              <span class="pb-ok" aria-hidden="true">✓</span>
+              <h3>The fix</h3>
+              <p>Fast fixes, then a care plan with backups and safe updates so it doesn't happen again.</p>
+              <a href="#contact" class="pb-cta plan-btn" data-service="Website care plan" data-plan="an update broke something and you're stuck fix">Fix this for me →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pb-band reveal">
+        <div>
+          <h3>Ticked one (or more)?</h3>
+          <p>Get a free website audit — I'll show you exactly what's holding your site back and how to fix it.</p>
+        </div>
+        <div class="cta-row">
+          <a href="#contact" class="btn magnetic" data-calendly>Get my free audit</a>
+          <a class="btn btn-ghost magnetic wa-btn" target="_blank" rel="noopener">Chat on WhatsApp</a>
+        </div>
+      </div>
+    </section>
+
     <!-- WORK -->
     <section class="work wrap" id="work">
       <div class="section-head reveal">
@@ -176,6 +304,110 @@
         <div class="card tilt reveal"><div class="ico">⇄</div><h3>Migrations & hosting setup</h3><p>Move hosts or domains safely, set up hosting, SSL and email, with everything checked on the other side.</p></div>
         <div class="card tilt reveal"><div class="ico">⚡</div><h3>Speed & security</h3><p>Faster load times, image and caching optimisation, backups and security hardening for peace of mind.</p></div>
         <div class="card tilt reveal"><div class="ico">↗</div><h3>SEO, bookings & memberships</h3><p>SEO-ready structure and local pages, plus booking, membership and form features for studios and clinics.</p></div>
+      </div>
+    </section>
+
+    <!-- INDUSTRIES -->
+    <section class="industries wrap" id="industries">
+      <div class="section-head reveal">
+        <p class="eyebrow">Industries</p>
+        <h2>Websites built for <em>your kind of business.</em></h2>
+        <p class="muted">I've built and fixed sites for businesses like these — so I know what your customers look for.</p>
+      </div>
+      <div class="ind-grid">
+        <div class="industry reveal" style="--i:0"><div class="ind-ico">✚</div><h3>Clinics, medspas & therapy</h3><p>Calm, trustworthy sites that explain treatments and fill appointment slots.</p><a href="#work" class="ind-eg">e.g. Ayadi MedSpa →</a></div>
+        <div class="industry reveal" style="--i:1"><div class="ind-ico">⚡</div><h3>Electricians, HVAC & trades</h3><p>Service-area pages and free-estimate forms that turn local searches into jobs.</p><a href="#work" class="ind-eg">e.g. Scott Nelson Electric →</a></div>
+        <div class="industry reveal" style="--i:2"><div class="ind-ico">✦</div><h3>Cleaning & home services</h3><p>Clear services, prices and quote requests that make booking you easy.</p><a href="#work" class="ind-eg">e.g. Unite Clean →</a></div>
+        <div class="industry reveal" style="--i:3"><div class="ind-ico">✂</div><h3>Salons, beauty & barbers</h3><p>Stylish sites that show off your work and get chairs booked.</p><a href="#work" class="ind-eg">e.g. Headmasters →</a></div>
+        <div class="industry reveal" style="--i:4"><div class="ind-ico">◎</div><h3>Fitness & wellness studios</h3><p>Class bookings, memberships and schedules that run themselves.</p><a href="#work" class="ind-eg">e.g. Rosy Studio →</a></div>
+        <div class="industry reveal" style="--i:5"><div class="ind-ico">◈</div><h3>Online stores & product brands</h3><p>WooCommerce stores built to look premium and sell on every device.</p><a href="#work" class="ind-eg">e.g. Revolution Beauty →</a></div>
+        <div class="industry reveal" style="--i:6"><div class="ind-ico">⇄</div><h3>Logistics & B2B companies</h3><p>Professional sites that build credibility and win bigger contracts.</p><a href="#work" class="ind-eg">e.g. Xpress Logistic →</a></div>
+        <div class="industry reveal" style="--i:7"><div class="ind-ico">♥</div><h3>Charities & nonprofits</h3><p>Story-led pages and news that move people to give and get involved.</p><a href="#work" class="ind-eg">e.g. Time to Help UK →</a></div>
+      </div>
+      <p class="ind-more reveal">Don't see your industry? <a href="#contact">Tell me about your business →</a></p>
+    </section>
+
+    <!-- HOLIDAY OFFER -->
+    <section class="offer wrap" id="offer" hidden>
+      <div class="offer-box reveal">
+        <div class="snow" aria-hidden="true"></div>
+        <div class="offer-head">
+          <p class="eyebrow">Limited-time holiday offer</p>
+          <h2>Start the new year with a <em>better website.</em></h2>
+          <p class="muted">Book before 31 December and save on any website package.</p>
+        </div>
+        <div class="countdown" data-countdown="full" aria-label="Time left on the offer">
+          <div><b data-u="d">00</b><span>Days</span></div>
+          <div><b data-u="h">00</b><span>Hours</span></div>
+          <div><b data-u="m">00</b><span>Minutes</span></div>
+          <div><b data-u="s">00</b><span>Seconds</span></div>
+        </div>
+        <div class="offer-cards">
+          <div class="offer-card">
+            <span class="offer-big">20% OFF</span>
+            <h3>All website packages</h3>
+            <p>Landing pages, business websites and e-commerce builds — 20% off when you book by 31 Dec 2026.</p>
+            <a href="#pricing" class="btn magnetic">See discounted prices</a>
+          </div>
+          <div class="offer-card">
+            <span class="offer-big">FREE</span>
+            <h3>Website audit</h3>
+            <p>Book a free call and I'll review your current site — speed, mobile, SEO and conversions — with clear fixes you can act on.</p>
+            <a href="#contact" class="btn btn-ghost magnetic" data-calendly>Book my free audit</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="pricing wrap" id="pricing">
+      <div class="section-head reveal">
+        <p class="eyebrow">Pricing</p>
+        <h2>Simple packages. <em>No surprises.</em></h2>
+        <p class="muted">Prices are starting points — every project gets a fixed-scope quote before any work begins.</p>
+      </div>
+      <div class="plans">
+        <div class="plan reveal">
+          
+          <h3>Landing Page</h3>
+          <p class="plan-desc">One high-converting page for an ad, launch or offer.</p>
+          <div class="price"><small>Starting at</small><div class="amount" data-price="150" data-per=""><span class="old">$150</span><b>$120</b><i></i></div><span class="deal-pill" data-offer>Holiday −20%</span></div>
+          <p class="timeline">⏱ 1 week</p>
+          <ul><li>Custom one-page design</li><li>Lead form or booking button</li><li>Mobile-first & fast-loading</li><li>Basic on-page SEO</li><li>WhatsApp / email integration</li></ul>
+          <a href="#contact" class="btn btn-ghost magnetic plan-btn" data-service="Landing page" data-plan="Landing Page">Choose Landing Page</a>
+        </div>
+        <div class="plan reveal popular">
+          <span class="badge">Most popular</span>
+          <h3>Business Website</h3>
+          <p class="plan-desc">A complete WordPress site that brings in enquiries.</p>
+          <div class="price"><small>Starting at</small><div class="amount" data-price="400" data-per=""><span class="old">$400</span><b>$320</b><i></i></div><span class="deal-pill" data-offer>Holiday −20%</span></div>
+          <p class="timeline">⏱ 2–3 weeks</p>
+          <ul><li>5–8 custom pages</li><li>Elementor build you can edit</li><li>Contact & quote forms</li><li>Local SEO & Google-ready setup</li><li>Speed & security setup</li><li>Walkthrough video on editing</li></ul>
+          <a href="#contact" class="btn magnetic plan-btn" data-service="New WordPress website" data-plan="Business Website">Choose Business Website</a>
+        </div>
+        <div class="plan reveal">
+          
+          <h3>E-commerce & Advanced</h3>
+          <p class="plan-desc">Stores, bookings, memberships and bigger builds.</p>
+          <div class="price"><small>Starting at</small><div class="amount" data-price="800" data-per=""><span class="old">$800</span><b>$640</b><i></i></div><span class="deal-pill" data-offer>Holiday −20%</span></div>
+          <p class="timeline">⏱ Scoped per project</p>
+          <ul><li>Everything in Business Website</li><li>WooCommerce store setup</li><li>Bookings, memberships or multilingual</li><li>Payment & shipping setup</li><li>Migration from your old site</li><li>Priority support</li></ul>
+          <a href="#contact" class="btn btn-ghost magnetic plan-btn" data-service="WooCommerce / e-commerce" data-plan="E-commerce & Advanced">Choose E-commerce</a>
+        </div>
+        <div class="plan reveal">
+          
+          <h3>Website Care</h3>
+          <p class="plan-desc">Keep your site fast, safe and up to date.</p>
+          <div class="price"><small>Starting at</small><div class="amount" data-price="49" data-per="/month"><b>$49</b><i>/month</i></div></div>
+          <p class="timeline">⏱ Cancel anytime</p>
+          <ul><li>Plugin, theme & core updates</li><li>Daily backups</li><li>Security & uptime monitoring</li><li>Monthly speed check</li><li>Small monthly edits included</li></ul>
+          <a href="#contact" class="btn btn-ghost magnetic plan-btn" data-service="Website care plan" data-plan="Website Care">Choose Website Care</a>
+        </div>
+      </div>
+      <div class="pay-notes reveal">
+        <span>✓ Fixed-scope quote before work starts</span>
+        <span>✓ Pay in milestones</span>
+        <span>✓ Pay by invoice or through Upwork for payment protection</span>
       </div>
     </section>
 
@@ -250,6 +482,7 @@
                   <option>Bug fix or maintenance</option>
                   <option>Site migration</option>
                   <option>Speed / security</option>
+                  <option>Website care plan</option>
                   <option>Something else</option>
                 </select>
               </label>

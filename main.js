@@ -41,6 +41,9 @@ const COUNTRIES = [
   { code: "nl", name: "Netherlands" },
 ];
 
+// Holiday offer — ends automatically at this date/time (Lagos time)
+const OFFER = { ends: "2026-12-31T23:59:59+01:00", discount: 0.2 };
+
 /* ========================================================= */
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -71,6 +74,7 @@ function loadShot(img, src, onReady, tries = 0) {
 (function contact() {
   const wa = `https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(CONFIG.whatsappMessage)}`;
   $("#waLink").href = wa; $("#waFloat").href = wa;
+  $$(".wa-btn").forEach(a => a.href = wa);
   $("#mailLink").href = `mailto:${CONFIG.email}?subject=${encodeURIComponent("Website project enquiry")}`;
   $("#mailText").textContent = CONFIG.email;
   $("#year").textContent = new Date().getFullYear();
@@ -148,6 +152,64 @@ function loadShot(img, src, onReady, tries = 0) {
     }
   });
 })();
+
+/* ---------- holiday offer: banner, countdown, prices ---------- */
+(function offer() {
+  const end = new Date(OFFER.ends).getTime();
+  const active = () => Date.now() < end;
+  const bar = $("#promoBar"), section = $("#offer");
+  let dismissed = false;
+  try { dismissed = sessionStorage.getItem("promoClosed") === "1"; } catch (e) {}
+
+  function applyPrices(on) {
+    $$(".amount[data-price]").forEach(a => {
+      if (a.dataset.per) return;
+      const p = +a.dataset.price, old = $(".old", a), now = $("b", a);
+      now.textContent = "$" + (on ? Math.round(p * (1 - OFFER.discount)) : p);
+      if (old) old.hidden = !on;
+    });
+    $$("[data-offer]").forEach(el => el.hidden = !on);
+  }
+  if (!active()) { applyPrices(false); return; }
+
+  section.hidden = false;
+  if (!dismissed) { bar.hidden = false; document.body.classList.add("has-bar"); }
+  $("#promoClose").addEventListener("click", () => {
+    bar.hidden = true; document.body.classList.remove("has-bar");
+    try { sessionStorage.setItem("promoClosed", "1"); } catch (e) {}
+  });
+  applyPrices(true);
+
+  const pad = n => String(n).padStart(2, "0");
+  const short = $("[data-countdown='short']"), units = {};
+  $$("[data-countdown='full'] b").forEach(b => units[b.dataset.u] = b);
+  function tick() {
+    const left = end - Date.now();
+    if (left <= 0) { bar.hidden = true; section.hidden = true; document.body.classList.remove("has-bar"); applyPrices(false); return; }
+    const d = Math.floor(left / 864e5), h = Math.floor(left / 36e5) % 24, m = Math.floor(left / 6e4) % 60, s = Math.floor(left / 1e3) % 60;
+    short.textContent = `${d}d ${pad(h)}h ${pad(m)}m ${pad(s)}s`;
+    const vals = { d: pad(d), h: pad(h), m: pad(m), s: pad(s) };
+    for (const k in vals) if (units[k] && units[k].textContent !== vals[k]) {
+      units[k].textContent = vals[k];
+      units[k].classList.remove("tick"); void units[k].offsetWidth; units[k].classList.add("tick");
+    }
+    setTimeout(tick, 1000 - (Date.now() % 1000));
+  }
+  tick();
+})();
+
+/* ---------- problem cards: tap to flip on touch screens ---------- */
+$$(".problem").forEach(c => c.addEventListener("click", e => { if (!e.target.closest("a")) c.classList.toggle("flipped"); }));
+
+/* ---------- package buttons pre-fill the contact form ---------- */
+$$(".plan-btn").forEach(btn => btn.addEventListener("click", () => {
+  const form = $("#contactForm"), sel = $("select[name=service]", form), msg = $("textarea[name=message]", form);
+  sel.value = btn.dataset.service;
+  if (!msg.value.trim()) msg.value = btn.closest(".problem")
+    ? `Hi Clinton, my website has this problem: ${btn.closest(".problem").querySelector("h3").textContent}. Can you help? `
+    : `Hi Clinton, I'm interested in the ${btn.dataset.plan} package.` + (!$("#offer").hidden ? " I'd like to claim the holiday 20% discount." : "") + " ";
+  setTimeout(() => $("input[name=name]", form).focus({ preventScroll: true }), 900);
+}));
 
 /* ---------- nav ---------- */
 const nav = $(".nav"), burger = $("#burger"), links = $("#navLinks");
