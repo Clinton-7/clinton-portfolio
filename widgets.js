@@ -59,8 +59,8 @@
   $(".hp-audit", pop).onclick = () => { closePop(); window.openCalendly(); };
   addEventListener("keydown", e => { if (e.key === "Escape" && !pop.hidden) closePop(); });
 
-  const popWanted = offerOn() && !store.get("hpSeen");
-  if (popWanted) setTimeout(() => { if (!chatOpen) openPop(); else scheduleTeaser(0); }, 3500);
+  const popWanted = offerOn(); // shows on every visit and every refresh while the offer runs
+  if (popWanted) setTimeout(() => { if (!chatOpen) openPop(); else scheduleTeaser(0); }, 1500);
 
   /* ---------------- CHAT ASSISTANT ---------------- */
   const root = document.createElement("div");
