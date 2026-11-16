@@ -51,13 +51,13 @@ const isTouch = matchMedia("(hover: none)").matches;
 
 /* ---------- live screenshots (WordPress mShots) ---------- */
 function shotURL(url, { w = 1280, h = 960, mobile = false } = {}) {
-  const base = "https://s0.wp.com/mshots/v1/" + encodeURIComponent(url);
-  return mobile ? `${base}?vpw=414&vph=896&w=414&h=896` : `${base}?w=${w}&h=${h}`;
+  // served through our own /api/shot proxy, which caches screenshots on Vercel's edge
+  return `/api/shot?u=${encodeURIComponent(url)}` + (mobile ? "&m=1" : `&w=${w}&h=${h}`);
 }
 // Load screenshots two at a time (the screenshot service stalls on big bursts)
 const shotQueue = []; let shotActive = 0;
 function runShotQueue() {
-  while (shotActive < 2 && shotQueue.length) {
+  while (shotActive < 3 && shotQueue.length) {
     const job = shotQueue.shift(); shotActive++;
     job().finally(() => { shotActive--; runShotQueue(); });
   }
@@ -68,10 +68,9 @@ function loadShot(img, src, onReady, tries = 0) {
   const retry = () => { if (tries < 10) setTimeout(() => loadShot(img, src, onReady, tries + 1), 5000); };
   shotQueue.push(() => {
     const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 15000);
-    return fetch(src, { mode: "cors", signal: ctrl.signal })
-      .then(r => r.ok ? r.blob() : Promise.reject(r.status))
+    return fetch(src, { signal: ctrl.signal })
+      .then(r => r.status === 200 ? r.blob() : Promise.reject(r.status))
       .then(blob => {
-        if (/gif/.test(blob.type) || blob.size < 35000) return retry();
         const obj = URL.createObjectURL(blob);
         if (img) img.src = obj;
         onReady && onReady(obj);
@@ -265,9 +264,9 @@ $$(".split").forEach(h => {
     b.onclick = () => go(i);
     bars.appendChild(b);
     const bg = $(".slide-bg", s);
-    loadShot(null, shotURL(s.dataset.bg, { w: 1600, h: 1000 }), src => bg.style.backgroundImage = `url("${src}")`);
+    loadShot(null, shotURL(s.dataset.bg, { w: 1280, h: 960 }), src => bg.style.backgroundImage = `url("${src}")`);
   });
-  $$("[data-shot]").forEach(img => loadShot(img, shotURL(img.dataset.shot, { w: 1280, h: 900, mobile: img.hasAttribute("data-mobile") })));
+  $$("[data-shot]").forEach(img => loadShot(img, shotURL(img.dataset.shot, { w: 1280, h: 960, mobile: img.hasAttribute("data-mobile") })));
 
   function paintBars() {
     $$("button", bars).forEach((b, i) => {
